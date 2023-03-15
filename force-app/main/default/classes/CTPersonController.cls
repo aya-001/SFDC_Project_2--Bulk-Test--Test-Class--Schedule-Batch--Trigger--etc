@@ -48,5 +48,29 @@ public with sharing class CTPersonController {
         }
         return recordPerson;
     } 
+
+
+    //count the number of peope depending on the health conditions
+    public static Map<String, Integer> getHealthStatusCount(){
+        AggregateResult[] groupAggregate = 
+        [SELECT COUNT(Id) co, Health_Status__c 
+        FROM Person__c
+        GROUP BY Health_Status__c];
+
+
+        //to put the number of people depending on the health condition
+        Map<String, Integer> numPeopleMap = new Map<String, Integer>();
+
+        for(Aggregateresult agg :groupAggregate){
+
+            //Cast datatype of AggregateResult
+            String healthStatus = String.valueOf(agg.get('Health_Status__c'));
+            Integer count = Integer.valueOf(agg.get('co'));
+
+            //out in map
+            numPeopleMap.put(healthStatus, count);
+        }
+        return numPeopleMap;
+    }
     
 }

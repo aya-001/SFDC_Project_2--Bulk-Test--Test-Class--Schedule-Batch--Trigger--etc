@@ -35,4 +35,22 @@ public with sharing class CTLocationController {
 
         return recordLocation;
     }
+
+    public static Map<String, Integer> getStatusCount(){
+        Aggregateresult[] grouoAggregate =
+            [SELECT COUNT(Address__c) co,Status__c FROM Location__c 
+            GROUP BY Status__c];
+
+            //to count the number of lovation depending on the sheath tatus
+            Map<String, Integer> countLocationMap = new Map<String, Integer>();
+            
+            for(Aggregateresult agg: grouoAggregate){
+                String healthStatus = String.valueOf(agg.get('Status__c'));
+                Integer numberOfLOcation = Integer.valueOf(agg.get('co'));
+                countLocationMap.put(healthStatus,numberOfLOcation);
+            }
+            
+            
+            return countLocationMap;
+    }
 }
