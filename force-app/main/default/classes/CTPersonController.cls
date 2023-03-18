@@ -72,5 +72,137 @@ public with sharing class CTPersonController {
         }
         return numPeopleMap;
     }
+
+
+
+    //⓵Mark all people 'Cohabitants' Orange -
+    //Except the Red /Orange one
+    public static Set<Id> getCohanitants(Set<Id>  personIds){
+        //avoid Red, Orange
+        List<String> healthStatus = new List<String> {'Green', 'Yellow'};
+        
+        //Query person Id
+        //whose Contact_Type__c is 'Cohabitant'
+        List<People_Tracing__c> peopleTraces =
+        [SELECT Id, Person_1__c, Person_2__c 
+            FROM People_Tracing__c
+            WHERE (Person_1__c IN :personIds OR Person_2__c IN :personIds)
+            AND Contact_Type__c = 'Cohabitant'
+            AND  (Person_1__r.Health_Status__c IN :healthStatus OR Person_2__r.Health_Status__c IN :healthStatus)];
+    
+
+        //put person's Id who is not in the personIds to Map
+        //same person can't be cohabitant by himself
+        Set<Id> cohabitants = new  Set<Id> ();
+        for(People_Tracing__c po :peopleTraces){
+            if(!personIds.contains(po.Person_1__c)){
+                cohabitants.add(po.Person_1__c);
+            }
+            if(!personIds.contains(po.Person_2__c)){
+                cohabitants.add(po.Person_2__c);
+            }
+        }
+
+
+        return cohabitants;
+        }
+
+
+    //⓶Mark all people 'Neighbors' Yellow -
+    //Except the Red /Orange one
+    public static Set<Id> getNeighbours(Set<Id>  personIds){
+       
+        //Query person Id
+        //whose Contact_Type__c is 'Neighbors'
+        List<People_Tracing__c> peopleTraces =
+        [SELECT Id, Person_1__c, Person_2__c 
+            FROM People_Tracing__c
+            WHERE (Person_1__c IN :personIds OR Person_2__c IN :personIds)
+            AND Contact_Type__c = 'Neighbour'
+            AND  (Person_1__r.Health_Status__c = 'Green' OR Person_2__r.Health_Status__c = 'Green')];
+    
+
+        //put person's Id who is not in the personIds to Map
+        //same person can't be cohabitant by himself
+        Set<Id> neighbours = new  Set<Id> ();
+        for(People_Tracing__c po :peopleTraces){
+            if(!personIds.contains(po.Person_1__c)){
+                neighbours.add(po.Person_1__c);
+            }
+            if(!personIds.contains(po.Person_2__c)){
+                neighbours.add(po.Person_2__c);
+            }
+        }
+
+
+        return neighbours;
+        }
+
+
+    //⓷Mark all people 'primaryContacts'  Orange -
+    //Except the Red /Orange one
+    public static Set<Id> getPrimaryContacts(Set<Id>  personIds){
+       
+        //avoid Red, Orange
+        List<String> healthStatus = new List<String> {'Green', 'Yellow'};
+
+        //Query person Id
+        //whose Contact_Type__c is 'Other'
+        List<People_Tracing__c> peopleTraces =
+        [SELECT Id, Person_1__c, Person_2__c 
+            FROM People_Tracing__c
+            WHERE (Person_1__c IN :personIds OR Person_2__c IN :personIds)
+            AND Contact_Type__c = 'Others'
+            AND Contact_Date__c = LAST_N_DAYS:10
+            AND  (Person_1__r.Health_Status__c IN: healthStatus OR Person_2__r.Health_Status__c IN: healthStatus)];
+    
+
+        //put person's Id who is not in the personIds to Map
+        //same person can't be cohabitant by himself
+        Set<Id> primaryContacts = new  Set<Id> ();
+        for(People_Tracing__c po :peopleTraces){
+            if(!personIds.contains(po.Person_1__c)){
+                primaryContacts.add(po.Person_1__c);
+            }
+            if(!personIds.contains(po.Person_2__c)){
+                primaryContacts.add(po.Person_2__c);
+            }
+        }
+
+
+        return primaryContacts;
+        }
+
+
+     //⓸Mark all people 'SecondaryContacts'  Yellow -
+    //Except the Red /Orange one
+    public static Set<Id> getSecondaryContacts(Set<Id>  primaryContactIds){
+       
+        //Query person Id
+        //whose Contact_Type__c is 'Other'
+        List<People_Tracing__c> peopleTraces =
+        [SELECT Id, Person_1__c, Person_2__c 
+            FROM People_Tracing__c
+            WHERE (Person_1__c IN :primaryContactIds OR Person_2__c IN :primaryContactIds)
+            AND Contact_Type__c = 'Others'
+            AND Contact_Date__c = LAST_N_DAYS:10
+            AND  (Person_1__r.Health_Status__c = 'Green' OR Person_2__r.Health_Status__c = 'Green')];
+    
+
+        //put person's Id who is not in the personIds to Map
+        //same person can't be cohabitant by himself
+        Set<Id> secondaryContacts = new  Set<Id> ();
+        for(People_Tracing__c po :peopleTraces){
+            if(!primaryContactIds.contains(po.Person_1__c)){
+                secondaryContacts.add(po.Person_1__c);
+            }
+            if(!primaryContactIds.contains(po.Person_2__c)){
+                secondaryContacts.add(po.Person_2__c);
+            }
+        }
+
+
+        return secondaryContacts;
+        }
     
 }
