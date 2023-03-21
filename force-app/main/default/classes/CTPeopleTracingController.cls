@@ -9,7 +9,6 @@ public with sharing class CTPeopleTracingController {
             FROM People_Tracing__c
             WHERE Person_1__c = :personId
             OR Person_2__c = :personId
-
             ORDER BY Contact_Date__c DESC];
         return tracepple;
     }

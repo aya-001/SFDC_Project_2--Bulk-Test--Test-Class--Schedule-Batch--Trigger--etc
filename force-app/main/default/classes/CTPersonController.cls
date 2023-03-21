@@ -77,7 +77,7 @@ public with sharing class CTPersonController {
 
     //⓵Mark all people 'Cohabitants' Orange -
     //Except the Red /Orange one
-    public static Set<Id> getCohanitants(Set<Id>  personIds){
+    public static Set<Id> getCohanitants(Set<Id> personIds, Set<Id> alreadyProcessedIds){
         //avoid Red, Orange
         List<String> healthStatus = new List<String> {'Green', 'Yellow'};
         
@@ -95,11 +95,13 @@ public with sharing class CTPersonController {
         //same person can't be cohabitant by himself
         Set<Id> cohabitants = new  Set<Id> ();
         for(People_Tracing__c po :peopleTraces){
-            if(!personIds.contains(po.Person_1__c)){
+            if(!alreadyProcessedIds.contains(po.Person_1__c)){
                 cohabitants.add(po.Person_1__c);
+                alreadyProcessedIds.add(po.Person_1__c);
             }
-            if(!personIds.contains(po.Person_2__c)){
+            if(!alreadyProcessedIds.contains(po.Person_2__c)){
                 cohabitants.add(po.Person_2__c);
+                alreadyProcessedIds.add(po.Person_2__c);
             }
         }
 
@@ -110,7 +112,7 @@ public with sharing class CTPersonController {
 
     //⓶Mark all people 'Neighbors' Yellow -
     //Except the Red /Orange one
-    public static Set<Id> getNeighbours(Set<Id>  personIds){
+    public static Set<Id> getNeighbours(Set<Id> personIds, Set<Id> alreadyProcessedIds){
        
         //Query person Id
         //whose Contact_Type__c is 'Neighbors'
@@ -126,22 +128,25 @@ public with sharing class CTPersonController {
         //same person can't be cohabitant by himself
         Set<Id> neighbours = new  Set<Id> ();
         for(People_Tracing__c po :peopleTraces){
-            if(!personIds.contains(po.Person_1__c)){
+            if(!alreadyProcessedIds.contains(po.Person_1__c)){
                 neighbours.add(po.Person_1__c);
+                alreadyProcessedIds.add(po.Person_1__c);
             }
-            if(!personIds.contains(po.Person_2__c)){
+            if(!alreadyProcessedIds.contains(po.Person_2__c)){
                 neighbours.add(po.Person_2__c);
+                alreadyProcessedIds.add(po.Person_2__c);
             }
         }
+        
 
 
         return neighbours;
-        }
+    }
 
 
     //⓷Mark all people 'primaryContacts'  Orange -
     //Except the Red /Orange one
-    public static Set<Id> getPrimaryContacts(Set<Id>  personIds){
+    public static Set<Id> getPrimaryContacts(Set<Id> personIds, Set<Id> alreadyProcessedIds){
        
         //avoid Red, Orange
         List<String> healthStatus = new List<String> {'Green', 'Yellow'};
@@ -161,22 +166,24 @@ public with sharing class CTPersonController {
         //same person can't be cohabitant by himself
         Set<Id> primaryContacts = new  Set<Id> ();
         for(People_Tracing__c po :peopleTraces){
-            if(!personIds.contains(po.Person_1__c)){
+            if(!alreadyProcessedIds.contains(po.Person_1__c)){
                 primaryContacts.add(po.Person_1__c);
+                alreadyProcessedIds.add(po.Person_1__c);
             }
-            if(!personIds.contains(po.Person_2__c)){
+            if(!alreadyProcessedIds.contains(po.Person_2__c)){
                 primaryContacts.add(po.Person_2__c);
+                alreadyProcessedIds.add(po.Person_2__c);
             }
         }
 
 
         return primaryContacts;
-        }
+    }
 
 
      //⓸Mark all people 'SecondaryContacts'  Yellow -
     //Except the Red /Orange one
-    public static Set<Id> getSecondaryContacts(Set<Id>  primaryContactIds){
+    public static Set<Id> getSecondaryContacts(Set<Id> primaryContactIds, Set<Id> alreadyProcessedIds){
        
         //Query person Id
         //whose Contact_Type__c is 'Other'
@@ -193,16 +200,18 @@ public with sharing class CTPersonController {
         //same person can't be cohabitant by himself
         Set<Id> secondaryContacts = new  Set<Id> ();
         for(People_Tracing__c po :peopleTraces){
-            if(!primaryContactIds.contains(po.Person_1__c)){
+            if(!alreadyProcessedIds.contains(po.Person_1__c)){
                 secondaryContacts.add(po.Person_1__c);
+                alreadyProcessedIds.add(po.Person_1__c);
             }
-            if(!primaryContactIds.contains(po.Person_2__c)){
+            if(!alreadyProcessedIds.contains(po.Person_2__c)){
                 secondaryContacts.add(po.Person_2__c);
+                alreadyProcessedIds.add(po.Person_2__c);
             }
         }
 
 
         return secondaryContacts;
-        }
+    }
     
 }
