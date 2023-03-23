@@ -6,6 +6,6 @@
         }else{
             component.set("v.headerTitle", "Location View");
         }
-        component.set("v.scope", selectHandleTabId);
+        component.set("v.scope", selectedTabId);
     }
-})
+});

@@ -92,4 +92,22 @@ public with sharing class CTLocationController {
             
             return countLocationMap;
     }
+
+    public static Map<String, Integer> getLocationHealthStatusCount() {
+        
+        AggregateResult[] countLocationStatus =
+        [SELECT COUNT(Id) co, Status__c FROM Location__c GROUP BY Status__c];
+
+        if(countLocationStatus != null && countLocationStatus.size() >0){
+            //put status & number of location into Map
+            Map<String, Integer> countLocationMap = new Map<String, Integer>();
+            for(AggregateResult ag :countLocationStatus){
+                countLocationMap.put(String.valueOf(ag.get('Status__c')), Integer.valueOf(ag.get('co')));
+            }
+            return countLocationMap;  
+        }
+        return null;
+    }
+
+    
 }

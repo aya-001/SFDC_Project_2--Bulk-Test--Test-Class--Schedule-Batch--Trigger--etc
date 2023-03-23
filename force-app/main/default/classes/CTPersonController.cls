@@ -213,5 +213,22 @@ public with sharing class CTPersonController {
 
         return secondaryContacts;
     }
+
+
+    public static Map<String, Integer> getPersonHealthStatusCount() {
+        AggregateResult[] countPeopleStatus =
+        [SELECT COUNT(Id) co, Health_Status__c FROM Person__c GROUP BY Health_Status__c ];
+        
+        if(countPeopleStatus != null && countPeopleStatus.size() > 0){
+            //put status, & number of count into Map
+            Map<String, Integer> countPersonMap = new Map<String, Integer>();
+            
+            for(AggregateResult ag :countPeopleStatus){
+                countPersonMap.put(String.valueOf(ag.get('Health_Status__c')),Integer.valueOf(ag.get('co')));
+            }  
+            return countPersonMap;
+        }
+        return null;
+    }
     
 }
