@@ -13,13 +13,13 @@ public with sharing class CTLocationController {
 
      public static List<Location__c> searchLocations(String searchTerm){
 
-        String srchLTerm = '%' + searchTerm + '%';
+        searchTerm = '%' + searchTerm + '%';
         List<Location__c> searchLocation = 
             [SELECT Address__c, CreatedById, Name,OwnerId,Pincode__c,Red_Score__c,Status__c,Status_Update_Date__c  
             FROM Location__c 
-            WHERE Name LIKE :srchLTerm
-            OR Pincode__c LIKE :srchLTerm
-            OR Address__c LIKE :srchLTerm
+            WHERE Name LIKE :searchTerm
+            OR Pincode__c LIKE :searchTerm
+            OR Address__c LIKE :searchTerm
             ORDER BY Status_Update_Date__c DESC NULLS LAST];
 
         return searchLocation;
