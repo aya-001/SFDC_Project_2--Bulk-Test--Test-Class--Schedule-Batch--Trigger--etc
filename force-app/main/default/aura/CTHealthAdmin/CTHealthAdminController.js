@@ -7,5 +7,8 @@
             component.set("v.headerTitle", "Location View");
         }
         component.set("v.scope", selectedTabId);
+
+        const healthHeaderComp = component.find("health-header")
+        healthHeaderComp.fetchCount();
     }
 });

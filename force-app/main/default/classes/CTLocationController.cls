@@ -2,9 +2,9 @@ public with sharing class CTLocationController {
     
     public static List<Location__c> getRecentStatusChanges(){
         List<Location__c> location = 
-            [SELECT Address__c, CreatedById, Name,OwnerId,Pincode__c,Red_Score__c,Status__c,Status_Update_Date__c  
+        [SELECT Id, Name, Address__c, Pincode__c, Red_Score__c, Status_Update_Date__c, Status__c 
             FROM Location__c 
-            ORDER BY Status_Update_Date__c DESC
+            ORDER BY Status_Update_Date__c DESC NULLS LAST 
             LIMIT 100];
         
         return location;

@@ -16,7 +16,10 @@ public with sharing class CTPersonController {
     //Get 100 contacts with recent health status change
     public static List<Person__c> getRecentHealthChanges(){
         List<Person__c> statusPerson = 
-            [SELECT Health_Status__c, Mobile__c, Name, OwnerId, Status_Update_Date__c, Token__c FROM Person__c  ORDER BY Status_Update_Date__c DESC NULLS LAST LIMIT 100];
+        [SELECT Id, Name, Health_Status__c, Mobile__c, Status_Update_Date__c, Token__c 
+            FROM Person__c 
+            ORDER BY Status_Update_Date__c DESC NULLS LAST 
+            LIMIT 100];
 
         return statusPerson;
     }
@@ -29,11 +32,11 @@ public with sharing class CTPersonController {
         String srchWords = '%' + searchTerm + '%';
         
         return [SELECT Id, Name, Health_Status__c, Mobile__c, Status_Update_Date__c, Token__c
-            FROM Person__c
-            WHERE Name LIKE :searchTerm
+             FROM Person__c
+           /* WHERE Name LIKE :searchTerm
                 OR Mobile__c LIKE :searchTerm
                 OR Token__c LIKE :searchTerm
-            ORDER BY Status_Update_Date__c DESC NULLS LAST];
+            ORDER BY Status_Update_Date__c DESC NULLS LAST  */];
     }
 
     

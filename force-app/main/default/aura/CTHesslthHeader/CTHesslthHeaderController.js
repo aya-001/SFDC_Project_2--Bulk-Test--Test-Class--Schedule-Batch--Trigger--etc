@@ -10,6 +10,12 @@
 
     doInit : function(component, event, helper){
         helper.fetchStatusCount(component);
+    },
+
+    fetchCount: function(component, event, helper){
+        helper.fetchStatusCount(component);
     }
+
+
 });
 
