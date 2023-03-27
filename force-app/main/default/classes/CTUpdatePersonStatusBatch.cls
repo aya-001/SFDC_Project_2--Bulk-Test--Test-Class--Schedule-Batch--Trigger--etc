@@ -1,0 +1,30 @@
+public with sharing class CTUpdatePersonStatusBatch implements Database.Batchable<SObject>{
+    public Database.QueryLocator start(Database.BatchableContext bc){
+       
+        //List to filter by Type of Status
+        List<String> status = new List<String>{'Yellow', 'Orange', 'Red'};
+        
+        //Variable to define 14days
+        Date today = Date.today();
+        Date fourteenDaysAgo = today - 14;
+
+        return Database.getQueryLocator('SELECT Id FROM Person__c WHERE Status_Update_Date__c = :fourteenDaysAgo AND Health_Status__c IN: status');
+    }
+
+    
+    public void execute(Database.BatchableContext bc, List<Person__c> scope){
+        for(Person__c person : scope){
+            person.Health_Status__c = 'Green';
+        }
+
+        update scope;
+    }
+    
+    public void finish(Database.BatchableContext bc){
+        System.debug('Batch is completed');
+
+    }
+    
+    
+    
+}
