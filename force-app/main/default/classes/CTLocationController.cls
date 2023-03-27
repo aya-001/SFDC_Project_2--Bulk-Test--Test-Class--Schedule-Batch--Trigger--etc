@@ -20,6 +20,7 @@ public with sharing class CTLocationController {
             WHERE Name LIKE :searchTerm
             OR Pincode__c LIKE :searchTerm
             OR Address__c LIKE :searchTerm
+            OR Status__c LIKE :searchTerm
             ORDER BY Status_Update_Date__c DESC NULLS LAST];
 
         return searchLocation;

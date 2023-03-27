@@ -36,6 +36,7 @@ public with sharing class CTPersonController {
             WHERE Name LIKE :searchTerm
                 OR Mobile__c LIKE :searchTerm
                 OR Token__c LIKE :searchTerm
+                OR Health_Status__c LIKE :searchTerm
             ORDER BY Status_Update_Date__c DESC NULLS LAST ];
     }
 
