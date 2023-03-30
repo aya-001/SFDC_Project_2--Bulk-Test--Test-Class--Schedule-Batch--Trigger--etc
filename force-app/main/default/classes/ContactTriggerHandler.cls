@@ -37,5 +37,5 @@ public with sharing class ContactTriggerHandler {
         }catch(ListException e){
             System.debug(e.getMessage());
         }
-    }
+    } 
 }

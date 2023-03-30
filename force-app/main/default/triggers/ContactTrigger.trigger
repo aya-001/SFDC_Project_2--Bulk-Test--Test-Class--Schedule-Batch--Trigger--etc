@@ -10,6 +10,7 @@ trigger ContactTrigger on Contact (after insert, after update, after delete, aft
 }
 
     /* insteas of Trigger.isAfter && Trigger.isInsert  etc,
+    
         switch on Trigger.operationType {
         when AFTER_INSERT {
             for(Contact con : Trigger.new){ ~  alsp wprks 
